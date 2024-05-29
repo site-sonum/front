@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+//a voir si on peut utiliser le dsfr
 export const AnchorNavigator = ({ data }) => {
   const [navClass, setNavClass] = useState("fixed-navigation");
 
