@@ -1,19 +1,8 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import ReactMarkDown from "react-markdown";
+import ReactMarkdown from "react-markdown";
 import { marginsBottom } from "../structs";
-
-interface Data {
-  id: string;
-  titre: string;
-  contenu: string;
-  espacement_bas: keyof typeof marginsBottom;
-}
-
-interface AccordionProps {
-  data: Data;
-  rows: number;
-}
+import { Data, AccordionProps } from "../types";
 
 export const Accordion: React.FC<AccordionProps> = ({ data, rows }) => {
   const [accordionData, setAccordionData] = useState<Data>({
@@ -32,7 +21,7 @@ export const Accordion: React.FC<AccordionProps> = ({ data, rows }) => {
       {rows === 1 && (
         <div
           className="mb2"
-          style={{ marginBottom: marginsBottom[data.espacement_bas] }}
+          style={{ marginBottom: marginsBottom[accordionData.espacement_bas] }}
         >
           <section
             className="fr-accordion fr-col-lg-8"
@@ -42,13 +31,13 @@ export const Accordion: React.FC<AccordionProps> = ({ data, rows }) => {
               <button
                 className="fr-accordion__btn"
                 aria-expanded="false"
-                aria-controls={`accordion-${data.id}`}
+                aria-controls={`accordion-${accordionData.id}`}
               >
                 {accordionData.titre}
               </button>
             </h3>
-            <div className="fr-collapse" id={`accordion-${data.id}`}>
-              <ReactMarkDown>{accordionData.contenu}</ReactMarkDown>
+            <div className="fr-collapse" id={`accordion-${accordionData.id}`}>
+              <ReactMarkdown>{accordionData.contenu}</ReactMarkdown>
             </div>
           </section>
         </div>
