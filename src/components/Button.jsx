@@ -37,7 +37,14 @@ export const Button = ({ data, rows }) => {
                 ? "_blank"
                 : null
             }
-            className={`${!buttonData.sans_contour ? (buttonData.couleur === "bleu" ? "fr-btn" : "fr-btn fr-btn--secondary") : "fr-btn fr-btn--tertiary-no-outline"} ${sizes[buttonData.taille]}`}
+            //l'affichage du bouton
+            className={`${
+              !buttonData.sans_contour
+                ? buttonData.couleur === "bleu"
+                  ? "fr-btn"
+                  : "f" + ""
+                : "fr-btn fr-btn--tertiary-no-outline"
+            } ${sizes[buttonData.taille]}`}
           >
             {buttonData.position_icone == "Droite" && buttonData.texte}
             {buttonData.afficher_icone && (

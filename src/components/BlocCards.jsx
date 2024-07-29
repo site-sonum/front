@@ -16,10 +16,10 @@ export const BlocCards = ({ articles, type }) => {
   const subDivideArticles = () => {
     const all = [];
     let sub = [];
-    let multiple = type == "breve" ? 9 : 4;
+    const multiple = type === "breve" ? 9 : 4;
 
-    articles.map((art, index) => {
-      if (index % multiple == 0) {
+    articles.forEach((art, index) => {
+      if (index % multiple === 0) {
         all.push(sub);
         sub = [];
       }
@@ -34,7 +34,7 @@ export const BlocCards = ({ articles, type }) => {
 
     tmpPagination.push(
       <>
-        <li>
+        <li key="first">
           <a
             className="fr-pagination__link fr-pagination__link--first"
             role="link"
@@ -44,13 +44,11 @@ export const BlocCards = ({ articles, type }) => {
             Première page
           </a>
         </li>
-        <li>
+        <li key="prev">
           <button
             className="fr-pagination__link fr-pagination__link--prev fr-pagination__link--lg-label"
-            disabled={cursor == 1 ? "true" : null}
-            onClick={() => {
-              setCursor(cursor > 1 ? cursor - 1 : cursor);
-            }}
+            disabled={cursor === 1}
+            onClick={() => setCursor(cursor > 1 ? cursor - 1 : cursor)}
           >
             Précédent
           </button>
@@ -61,7 +59,7 @@ export const BlocCards = ({ articles, type }) => {
     if (subArticles.length <= offset) {
       for (let i = 1; i < subArticles.length + 1; i++) {
         tmpPagination.push(
-          <li>
+          <li key={i}>
             <a
               className="fr-pagination__link"
               href="#"
@@ -77,7 +75,7 @@ export const BlocCards = ({ articles, type }) => {
       if (cursor < offset) {
         for (let i = 1; i < offset + 1; i++) {
           tmpPagination.push(
-            <li>
+            <li key={i}>
               <a
                 className="fr-pagination__link"
                 href="#"
@@ -95,8 +93,9 @@ export const BlocCards = ({ articles, type }) => {
         tmpPagination.push(
           <button
             className="fr-pagination__link fr-displayed-lg"
-            disabled="true"
+            disabled
             style={{ cursor: "default" }}
+            key="ellipsis-1"
           >
             …
           </button>,
@@ -104,7 +103,7 @@ export const BlocCards = ({ articles, type }) => {
 
         for (let i = cursor - 1; i < cursor + 2; i++) {
           tmpPagination.push(
-            <li>
+            <li key={i}>
               <a
                 className="fr-pagination__link"
                 href="#"
@@ -120,8 +119,9 @@ export const BlocCards = ({ articles, type }) => {
         tmpPagination.push(
           <button
             className="fr-pagination__link fr-displayed-lg"
-            disabled="true"
+            disabled
             style={{ cursor: "default" }}
+            key="ellipsis-2"
           >
             …
           </button>,
@@ -132,22 +132,22 @@ export const BlocCards = ({ articles, type }) => {
         tmpPagination.push(
           <button
             className="fr-pagination__link fr-displayed-lg"
-            disabled="true"
+            disabled
             style={{ cursor: "default" }}
+            key="ellipsis-3"
           >
             …
           </button>,
         );
 
-        const gap = subArticles.length - cursor == 1 ? 2 : 1;
+        const gap = subArticles.length - cursor === 1 ? 2 : 1;
 
         for (let i = cursor - 1; i < cursor + gap; i++) {
           tmpPagination.push(
-            <li>
+            <li key={i}>
               <a
                 className="fr-pagination__link fr-displayed-lg"
                 href="#"
-                disabled="false"
                 onClick={() => setCursor(i)}
                 aria-current={cursor === i ? "true" : null}
               >
@@ -161,18 +161,18 @@ export const BlocCards = ({ articles, type }) => {
 
     tmpPagination.push(
       <>
-        <li>
+        <li key="next">
           <button
             className="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label"
-            disabled={cursor == subArticles.length ? "true" : null}
-            onClick={() => {
-              setCursor(cursor < subArticles.length ? cursor + 1 : cursor);
-            }}
+            disabled={cursor === subArticles.length}
+            onClick={() =>
+              setCursor(cursor < subArticles.length ? cursor + 1 : cursor)
+            }
           >
             Suivant
           </button>
         </li>
-        <li>
+        <li key="last">
           <a
             className="fr-pagination__link fr-pagination__link--last"
             href="#"
@@ -189,12 +189,10 @@ export const BlocCards = ({ articles, type }) => {
   useEffect(() => {
     subDivideArticles();
   }, [articles]);
+
   useEffect(() => {
     updatePagination();
-  }, [subArticles]);
-  useEffect(() => {
-    updatePagination();
-  }, [cursor]);
+  }, [subArticles, cursor]);
 
   useEffect(() => {
     if (type != null) {
@@ -208,25 +206,25 @@ export const BlocCards = ({ articles, type }) => {
       <div className="flexrow-container">
         <div className="grid3">
           {/* breves */}
-          {articleType == "breve" &&
+          {articleType === "breve" &&
             subArticles[cursor - 1] &&
             subArticles[cursor - 1].map((article) => (
-              <VerticalCard data={article} />
+              <VerticalCard key={article.id} data={article} />
             ))}
         </div>
       </div>
 
       {/* publications stratégiques */}
-      {articleType == "rapport-strategique" &&
+      {articleType === "rapport-strategique" &&
         subArticles[cursor - 1] &&
         subArticles[cursor - 1].map((article) => (
-          <HorizontalCard data={article} rows={1} />
+          <HorizontalCard key={article.id} data={article} rows={1} />
         ))}
       {/* rapports de recherches */}
-      {articleType == "etude" &&
+      {articleType === "etude" &&
         subArticles[cursor - 1] &&
         subArticles[cursor - 1].map((article) => (
-          <HorizontalCard data={article} rows={1} />
+          <HorizontalCard key={article.id} data={article} rows={1} />
         ))}
 
       <div className="flexrow-container">

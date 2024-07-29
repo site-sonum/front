@@ -82,41 +82,41 @@
 }
 
 /* BUTTONS */
-.fr-btn:focus {
-  background-color: rgba(35, 35, 255, 1);
-}
+/*.fr-btn:focus {*/
+/*  background-color: rgba(35, 35, 255, 1);*/
+/*}*/
 
-.fr-btn:active {
-  border: 1px solid rgba(0, 0, 145, 1) !important;
-  background-color: rgba(0, 0, 145, 1) !important;
-  padding: 4px 12px;
-  box-shadow:
-    0 0 0 4px white,
-    0 0 0 5px rgba(0, 0, 145, 1); /* Ajoute une bordure blanche et une bordure bleue */
-}
+/*.fr-btn:active {*/
+/*  border: 1px solid rgba(0, 0, 145, 1) !important;*/
+/*  background-color: rgba(0, 0, 145, 1) !important;*/
+/*  padding: 4px 12px;*/
+/*  box-shadow:*/
+/*    0 0 0 4px white,*/
+/*    0 0 0 5px rgba(0, 0, 145, 1); !* Ajoute une bordure blanche et une bordure bleue *!*/
+/*}*/
 
-.fr-btn--secondary:focus {
-  background-color: rgba(0, 0, 0, 0.04);
-}
+/*.fr-btn--secondary:focus {*/
+/*  background-color: rgba(0, 0, 0, 0.04);*/
+/*}*/
 
-.fr-btn--secondary:active {
-  border: 1px solid rgba(0, 0, 145, 1) !important;
-  background-color: white !important;
-  padding: 4px 12px;
-  box-shadow:
-    0 0 0 4px white,
-    0 0 0 5px rgba(0, 0, 145, 1);
-}
+/*.fr-btn--secondary:active {*/
+/*  border: 1px solid rgba(0, 0, 145, 1) !important;*/
+/*  background-color: white !important;*/
+/*  padding: 4px 12px;*/
+/*  box-shadow:*/
+/*    0 0 0 4px white,*/
+/*    0 0 0 5px rgba(0, 0, 145, 1);*/
+/*}*/
 
-.fr-btn--tertiary-no-outline:active {
-  border: 1px solid rgba(221, 221, 221, 1) !important;
-  background-color: white !important;
-  box-shadow: 0 0 0 1px rgba(10, 118, 246, 1);
-}
+/*.fr-btn--tertiary-no-outline:active {*/
+/*  border: 1px solid rgba(221, 221, 221, 1) !important;*/
+/*  background-color: white !important;*/
+/*  box-shadow: 0 0 0 1px rgba(10, 118, 246, 1);*/
+/*}*/
 
-.fr-btn--tertiary-no-outline:focus {
-  background-color: rgba(0, 0, 0, 0.04);
-}
+/*.fr-btn--tertiary-no-outline:focus {*/
+/*  background-color: rgba(0, 0, 0, 0.04);*/
+/*}*/
 
 .picto {
   width: 17px;

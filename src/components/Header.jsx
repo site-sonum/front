@@ -8,7 +8,6 @@ import "remixicon/fonts/remixicon.css";
 //// FUNCTIONS ////
 import { fetchData } from "../functions/fetcher.js";
 import { HOST_URL } from "../env.js";
-
 // eslint-disable-next-line react/prop-types
 export const Header = ({ liens_navbar, alerte }) => {
   const [selectedLink, setSelectedLink] = useState(null);
@@ -18,7 +17,6 @@ export const Header = ({ liens_navbar, alerte }) => {
   const [fixNav, setFixNav] = useState(false);
   const [headerImage, setHeaderImage] = useState(null);
   const [headerLinks, setHeaderLinks] = useState(null);
-  console.log(headerLinks);
   const location = useLocation();
 
   const getNestedPath = (pathname) => {
