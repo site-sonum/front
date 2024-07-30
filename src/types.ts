@@ -9,15 +9,11 @@ export type AccordionData = {
 };
 
 //AnchorNavigator
-export interface Ancre {
+export type Ancre = {
   ancre: string;
   titre: string;
-}
+};
 
-export interface NavigationData {
+export type NavigationData = {
   ancre: Ancre[];
-}
-
-export interface AnchorNavigatorProps {
-  data: NavigationData;
-}
+};

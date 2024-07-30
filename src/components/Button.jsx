@@ -15,14 +15,14 @@ export const Button = ({ data, rows }) => {
 
   useEffect(() => {
     setButtonData(data);
-    data.couleur == "bleu"
+    data.couleur === "bleu"
       ? setFillIcon("rgb(255,255,255,1)")
       : setFillIcon("rgb(0, 0, 145)");
   }, [data]);
 
   return (
     <>
-      {rows == 1 && (
+      {rows === 1 && (
         <div
           key={buttonData.id}
           className={`${position[buttonData.position] === "left" || position[buttonData.position] === "right" ? position[buttonData.position] : "center"}
@@ -45,14 +45,14 @@ export const Button = ({ data, rows }) => {
                 : "fr-btn fr-btn--tertiary-no-outline"
             } ${sizes[buttonData.taille]}`}
           >
-            {buttonData.position_icone == "Droite" && buttonData.texte}
+            {buttonData.position_icone === "Droite" && buttonData.texte}
             {buttonData.afficher_icone && (
               <span
                 style={{
                   width:
-                    buttonData.taille == "Petit"
+                    buttonData.taille === "Petit"
                       ? "20px"
-                      : buttonData.taille == "Moyen"
+                      : buttonData.taille === "Moyen"
                         ? "23px"
                         : "26px",
                   transform: "translateY(2px)",
@@ -67,7 +67,7 @@ export const Button = ({ data, rows }) => {
               </span>
             )}
 
-            {buttonData.position_icone != "Droite" && buttonData.texte}
+            {buttonData.position_icone !== "Droite" && buttonData.texte}
           </Link>
         </div>
       )}
@@ -86,14 +86,14 @@ export const Button = ({ data, rows }) => {
             }
             className={`${!buttonData.sans_contour ? (buttonData.couleur === "bleu" ? "fr-btn" : "fr-btn fr-btn--secondary") : "fr-btn fr-btn--tertiary-no-outline"} ${sizes[buttonData.taille]}`}
           >
-            {buttonData.position_icone == "Droite" && buttonData.texte}
+            {buttonData.position_icone === "Droite" && buttonData.texte}
             {buttonData.afficher_icone && (
               <span
                 style={{
                   width:
-                    buttonData.taille == "Petit"
+                    buttonData.taille === "Petit"
                       ? "20px"
-                      : buttonData.taille == "Moyen"
+                      : buttonData.taille === "Moyen"
                         ? "23px"
                         : "26px",
                   transform: "translateY(2px)",
@@ -107,7 +107,7 @@ export const Button = ({ data, rows }) => {
                 </svg>
               </span>
             )}
-            {buttonData.position_icone != "Droite" && buttonData.texte}
+            {buttonData.position_icone !== "Droite" && buttonData.texte}
           </Link>
         </div>
       )}

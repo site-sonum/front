@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { AnchorNavigatorProps } from "../types";
+import { NavigationData } from "../types";
 
 //a voir si on peut utiliser le dsfr
 
+type AnchorNavigatorProps = {
+  data: NavigationData;
+};
 export const AnchorNavigator: React.FC<AnchorNavigatorProps> = ({ data }) => {
   const [navClass, setNavClass] = useState<string>("fixed-navigation");
 

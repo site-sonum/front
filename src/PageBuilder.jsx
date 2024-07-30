@@ -13,7 +13,7 @@ import { labelColors } from "./structs";
 import { position } from "./structs";
 import { marginsBottom } from "./structs";
 ///COMPONENTS///
-import { Banner } from "./components/Banner.jsx";
+import { Banner } from "./components/Banner.tsx";
 import { HorizontalCard } from "./components/HorizontalCard.jsx";
 import { VerticalCard } from "./components/VerticalCard.jsx";
 import { BlocFields } from "./components/BlocFields.jsx";
@@ -32,7 +32,7 @@ import { Title } from "./components/Title.jsx";
 import { Iframe } from "./components/Iframe.jsx";
 import { RollingCard } from "./components/RollingCard.jsx";
 import { BreadCrumb } from "./components/BreadCrumb.jsx";
-import { BannerTitle } from "./components/BannerTitle.jsx";
+import { BannerTitle } from "./components/BannerTitle.tsx";
 import { ToolsDevicesContainer } from "./components/ToolsDevicesContainer.jsx";
 
 export const PageBuilder = ({
