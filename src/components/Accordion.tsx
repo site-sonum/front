@@ -2,15 +2,14 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { marginsBottom } from "../structs";
-import { Data, AccordionProps } from "../types";
+import { AccordionData } from "../types";
 
+type AccordionProps = {
+  data: AccordionData;
+  rows: number;
+};
 export const Accordion: React.FC<AccordionProps> = ({ data, rows }) => {
-  const [accordionData, setAccordionData] = useState<Data>({
-    id: "",
-    titre: "",
-    contenu: "",
-    espacement_bas: Object.keys(marginsBottom)[0] as keyof typeof marginsBottom,
-  });
+  const [accordionData, setAccordionData] = useState<AccordionData>(data);
 
   useEffect(() => {
     setAccordionData(data);

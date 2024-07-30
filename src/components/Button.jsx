@@ -37,7 +37,6 @@ export const Button = ({ data, rows }) => {
                 ? "_blank"
                 : null
             }
-            //l'affichage du bouton
             className={`${
               !buttonData.sans_contour
                 ? buttonData.couleur === "bleu"

@@ -3,11 +3,14 @@
 /* eslint-disable react/jsx-key */
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
 // pictogrammes //
 import "remixicon/fonts/remixicon.css";
+
 //// FUNCTIONS ////
 import { fetchData } from "../functions/fetcher.js";
 import { HOST_URL } from "../env.js";
+
 // eslint-disable-next-line react/prop-types
 export const Header = ({ liens_navbar, alerte }) => {
   const [selectedLink, setSelectedLink] = useState(null);

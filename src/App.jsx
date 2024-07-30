@@ -84,7 +84,6 @@ function App() {
         const respRapports = await fetchData(
           HOST_URL + "/api/rapports-de-recherches",
         );
-        console.log("respBreves", respBreves);
         setArticles([respBreves, respStrategies, respRapports]);
       } catch (e) {
         console.log("Erreur", e);
