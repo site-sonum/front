@@ -3,8 +3,10 @@
 /* eslint-disable react/jsx-key */
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
 // pictogrammes //
 import "remixicon/fonts/remixicon.css";
+
 //// FUNCTIONS ////
 import { fetchData } from "../functions/fetcher.js";
 import { HOST_URL } from "../env.js";
@@ -18,7 +20,6 @@ export const Header = ({ liens_navbar, alerte }) => {
   const [fixNav, setFixNav] = useState(false);
   const [headerImage, setHeaderImage] = useState(null);
   const [headerLinks, setHeaderLinks] = useState(null);
-  console.log(headerLinks);
   const location = useLocation();
 
   const getNestedPath = (pathname) => {

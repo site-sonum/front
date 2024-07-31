@@ -13,11 +13,11 @@ import { labelColors } from "./structs";
 import { position } from "./structs";
 import { marginsBottom } from "./structs";
 ///COMPONENTS///
-import { Banner } from "./components/Banner.jsx";
+import { Banner } from "./components/Banner.tsx";
 import { HorizontalCard } from "./components/HorizontalCard.jsx";
 import { VerticalCard } from "./components/VerticalCard.jsx";
 import { BlocFields } from "./components/BlocFields.jsx";
-import { AnchorNavigator } from "./components/AnchorNavigator.jsx";
+import { AnchorNavigator } from "./components/AnchorNavigator.tsx";
 import { BlocCards } from "./components/BlocCards.jsx";
 import { Quote } from "./components/Quote.jsx";
 import { Media } from "./components/Media.jsx";
@@ -27,12 +27,12 @@ import { ButtonGroup } from "./components/ButtonGroup.jsx";
 import { NavLink } from "./components/NavLink.jsx";
 import { DownloadLink } from "./components/DownloadLink.jsx";
 import { DownloadCard } from "./components/DownloadCard.jsx";
-import { Accordion } from "./components/Accordion.jsx";
+import { Accordion } from "./components/Accordion.tsx";
 import { Title } from "./components/Title.jsx";
 import { Iframe } from "./components/Iframe.jsx";
 import { RollingCard } from "./components/RollingCard.jsx";
 import { BreadCrumb } from "./components/BreadCrumb.jsx";
-import { BannerTitle } from "./components/BannerTitle.jsx";
+import { BannerTitle } from "./components/BannerTitle.tsx";
 import { ToolsDevicesContainer } from "./components/ToolsDevicesContainer.jsx";
 
 export const PageBuilder = ({

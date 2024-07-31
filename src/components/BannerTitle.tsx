@@ -4,7 +4,22 @@ import { marginsBottom } from "../structs";
 
 import { HOST_URL } from "../env.js";
 
-export const BannerTitle = ({ data }) => {
+type BannerTitleProps = {
+  data: {
+    key: string;
+    espacement_bas: string;
+    titre: string;
+    texte: string;
+    image?: {
+      data?: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+  };
+};
+export const BannerTitle = ({ data }: BannerTitleProps) => {
   const [imageUrl, setImageUrl] = useState(null);
   const location = useLocation();
 
@@ -53,6 +68,7 @@ export const BannerTitle = ({ data }) => {
             className="banner-image ml-auto mr-40"
             style={{ maxWidth: "250px", transform: "translate(15%, -82%)" }}
             src={imageUrl}
+            alt=""
           />
         )}
       </div>
