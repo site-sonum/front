@@ -17,6 +17,7 @@ export type Ancre = {
 export type NavigationData = {
   ancre: Ancre[];
 };
+
 //BlocCards
 export type BlocCardArticle = {
   id: string;
