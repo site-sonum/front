@@ -4,15 +4,15 @@ import React, { useEffect, useState } from "react";
 import { VerticalCard } from "./VerticalCard";
 import { HorizontalCard } from "./HorizontalCard";
 //TYPE//
-import { Article } from "../types";
+import { BlocCardArticle } from "../types";
 
 type BlocCardsProps = {
-  articles: Article[];
+  articles: BlocCardArticle[];
   type: "breve" | "rapport-strategique" | "etude" | null;
 };
 
 export const BlocCards: React.FC<BlocCardsProps> = ({ articles, type }) => {
-  const [subArticles, setSubArticles] = useState<Article[][]>([]);
+  const [subArticles, setSubArticles] = useState<BlocCardArticle[][]>([]);
   const [cursor, setCursor] = useState<number>(1);
   const [pagination, setPagination] = useState<React.ReactNode | null>(null);
   const [articleType, setArticleType] = useState<BlocCardsProps["type"]>(null);
@@ -20,8 +20,8 @@ export const BlocCards: React.FC<BlocCardsProps> = ({ articles, type }) => {
   const offset = 7;
 
   const subDivideArticles = () => {
-    const all: Article[][] = [];
-    let sub: Article[] = [];
+    const all: BlocCardArticle[][] = [];
+    let sub: BlocCardArticle[] = [];
     const multiple = type === "breve" ? 9 : 4;
 
     articles.forEach((art, index) => {
