@@ -17,3 +17,8 @@ export type Ancre = {
 export type NavigationData = {
   ancre: Ancre[];
 };
+
+export type Article = {
+  id: string;
+  [key: string]: any;
+};
