@@ -20,6 +20,33 @@ export type NavigationData = {
 
 //BlocCards
 export type BlocCardArticle = {
+  id: number;
+  image?: {
+    data?: {
+      attributes: {
+        url: string;
+      };
+    };
+  };
+  type: string;
+  titre_de_la_carte: string;
+  taille: "Petit" | "Moyen" | "Grand";
+  texte_en_valeur?: string;
+  texte?: string;
+  label?: string;
+  labels: Array<{
+    titre_du_label: string;
+  }>;
+  espacement_bas: keyof typeof marginsBottom;
+  position?: string;
+  lien: string;
+  titre_du_lien: string;
+};
+
+//BlocFieldSimple
+export type BlocFieldSimple = {
   id: string;
-  [key: string]: any;
+  page_cible: string;
+  texte_en_valeur: string;
+  texte: string;
 };

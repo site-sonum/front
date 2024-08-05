@@ -15,10 +15,10 @@ import { marginsBottom } from "./structs";
 ///COMPONENTS///
 import { Banner } from "./components/Banner.tsx";
 import { HorizontalCard } from "./components/HorizontalCard.jsx";
-import { VerticalCard } from "./components/VerticalCard.jsx";
-import { BlocFields } from "./components/BlocFields.jsx";
+import { VerticalCard } from "./components/VerticalCard.tsx";
+import { BlocFields } from "./components/BlocFields.tsx";
 import { AnchorNavigator } from "./components/AnchorNavigator.tsx";
-import { BlocCards } from "./components/BlocCards.jsx";
+import { BlocCards } from "./components/BlocCards.tsx";
 import { Quote } from "./components/Quote.jsx";
 import { Media } from "./components/Media.jsx";
 import { MiseEnAvant } from "./components/MiseEnAvant";
@@ -53,7 +53,7 @@ export const PageBuilder = ({
   const allComponents = buildComponents(data);
   const struct = buildSections(allComponents);
   const array = struct[1];
-  const hasBannerTitle = array && array.some((e) => e.type == "bandeau-titre");
+  const hasBannerTitle = array && array.some((e) => e.type === "bandeau-titre");
 
   useEffect(() => {
     if (dataArticles.length > 0) {
@@ -96,8 +96,8 @@ export const PageBuilder = ({
                 return (
                   <div
                     className={
-                      position[e.position] == "left" ||
-                      position[e.position] == "right"
+                      position[e.position] === "left" ||
+                      position[e.position] === "right"
                         ? `${position[e.position]}`
                         : "center"
                     }
@@ -110,34 +110,27 @@ export const PageBuilder = ({
                     </p>
                   </div>
                 );
-                // eslint-disable-next-line no-unreachable
-                break;
+              // eslint-disable-next-line no-unreachable
               case "bloc-de-texte":
                 return (
                   <div>
                     <TextArea data={e} row={null} />
                   </div>
                 );
-                // eslint-disable-next-line no-unreachable
-                break;
+              // eslint-disable-next-line no-unreachable
               case "titre":
                 return <Title data={e} />;
-                // eslint-disable-next-line no-unreachable
-                break;
+              // eslint-disable-next-line no-unreachable
               case "bouton":
                 return <Button data={e} rows={1} />;
-                // eslint-disable-next-line no-unreachable
-                break;
+              // eslint-disable-next-line no-unreachable
               case "groupe-de-boutons":
                 return <ButtonGroup data={e} rows={1} />;
-                break;
               case "carte-verticale":
                 return <VerticalCard data={e} rows={1} />;
-                break;
               case "carte-horizontale":
                 return <HorizontalCard data={e} rows={1} />;
-                // eslint-disable-next-line no-unreachable
-                break;
+              // eslint-disable-next-line no-unreachable
               case "flux-de-publications":
                 return (
                   <div
@@ -159,7 +152,6 @@ export const PageBuilder = ({
                     </div>
                   </div>
                 );
-                break;
               case "flux-actualite":
                 return (
                   <div
@@ -174,19 +166,14 @@ export const PageBuilder = ({
                     </div>
                   </div>
                 );
-                break;
               case "champ-de-blocs":
                 return <BlocFields data={e} />;
-                break;
               case "navigation":
                 return <AnchorNavigator data={e} />;
-                break;
               case "ancre":
                 return <div className="translate-header-margin" id={e.ancre} />;
-                break;
               case "bloc-de-breves":
                 return <BlocCards articles={breves} type="breve" />;
-                break;
               case "bloc-de-publications-strategiques":
                 return (
                   <BlocCards
@@ -194,37 +181,26 @@ export const PageBuilder = ({
                     type="rapport-strategique"
                   />
                 );
-                break;
               case "bloc-de-rapports-de-recherches":
                 return <BlocCards articles={recherches} type="etude" />;
-                break;
               case "citation":
                 return <Quote data={e} />;
-                break;
               case "mise-en-avant":
                 return <MiseEnAvant data={e} />;
-                break;
               case "media":
                 return <Media data={e} rows={1} />;
-                break;
               case "lien-hypertexte":
                 return <NavLink data={e} rows={1} />;
-                break;
               case "telechargement":
                 return <DownloadLink data={e} rows={1} />;
-                break;
               case "carte-telechargement":
                 return <DownloadCard data={e} rows={1} />;
-                break;
               case "accordeon":
                 return <Accordion data={e} rows={1} />;
-                break;
               case "iframe":
                 return <Iframe data={e} rows={1} />;
-                break;
               case "carte-deroulante":
                 return <RollingCard data={e} />;
-                break;
               case "bandeau-titre":
                 if (bannerTitle == null) setBannerTitle(e);
                 break;
@@ -236,7 +212,6 @@ export const PageBuilder = ({
                     type={"Dispositif"}
                   />
                 );
-                break;
               case "flux-outils":
                 return (
                   <ToolsDevicesContainer
@@ -245,12 +220,11 @@ export const PageBuilder = ({
                     type={"Outil"}
                   />
                 );
-                break;
               case "section":
                 const sections = buildSections(allComponents)[0];
                 if (sections) {
                   const currentSection = sections.find(
-                    (i) => i.sectionId == e.id,
+                    (i) => i.sectionId === e.id,
                   );
                   let gridType = 0;
                   if (currentSection) {
@@ -275,8 +249,7 @@ export const PageBuilder = ({
                                     </p>
                                   </div>
                                 );
-                                // eslint-disable-next-line no-unreachable
-                                break;
+                              // eslint-disable-next-line no-unreachable
                               case "bloc-de-texte":
                                 return (
                                   <div key={c.id}>
@@ -287,27 +260,24 @@ export const PageBuilder = ({
                                     />
                                   </div>
                                 );
-                                // eslint-disable-next-line no-unreachable
-                                break;
+                              // eslint-disable-next-line no-unreachable
                               case "titre":
                                 return (
                                   <div key={c.id}>
-                                    {e.taille == "h1" && <h1>{e.titre}</h1>}
-                                    {e.taille == "h2" && <h2>{e.titre}</h2>}
-                                    {e.taille == "h3" && <h3>{e.titre}</h3>}
-                                    {e.taille == "h4" && <h4>{e.titre}</h4>}
-                                    {e.taille == "h5" && <h5>{e.titre}</h5>}
-                                    {e.taille == "h6" && <h6>{e.titre}</h6>}
+                                    {e.taille === "h1" && <h1>{e.titre}</h1>}
+                                    {e.taille === "h2" && <h2>{e.titre}</h2>}
+                                    {e.taille === "h3" && <h3>{e.titre}</h3>}
+                                    {e.taille === "h4" && <h4>{e.titre}</h4>}
+                                    {e.taille === "h5" && <h5>{e.titre}</h5>}
+                                    {e.taille === "h6" && <h6>{e.titre}</h6>}
                                   </div>
                                 );
-                                // eslint-disable-next-line no-unreachable
-                                break;
+                              // eslint-disable-next-line no-unreachable
                               case "bouton":
                                 return (
                                   <Button data={c} rows={currentSection.rows} />
                                 );
-                                // eslint-disable-next-line no-unreachable
-                                break;
+                              // eslint-disable-next-line no-unreachable
                               case "groupe-de-boutons":
                                 return (
                                   <ButtonGroup
@@ -315,7 +285,6 @@ export const PageBuilder = ({
                                     rows={currentSection.rows}
                                   />
                                 );
-                                break;
                               case "carte-verticale":
                                 return (
                                   <VerticalCard
@@ -323,8 +292,7 @@ export const PageBuilder = ({
                                     rows={currentSection.rows}
                                   />
                                 );
-                                // eslint-disable-next-line no-unreachable
-                                break;
+                              // eslint-disable-next-line no-unreachable
                               case "carte-horizontale":
                                 return (
                                   <HorizontalCard
@@ -332,8 +300,7 @@ export const PageBuilder = ({
                                     rows={currentSection.rows}
                                   />
                                 );
-                                // eslint-disable-next-line no-unreachable
-                                break;
+                              // eslint-disable-next-line no-unreachable
                               case "lien-hypertexte":
                                 return (
                                   <NavLink
@@ -341,7 +308,6 @@ export const PageBuilder = ({
                                     rows={currentSection.rows}
                                   />
                                 );
-                                break;
                               case "telechargement":
                                 return (
                                   <DownloadLink
@@ -349,7 +315,6 @@ export const PageBuilder = ({
                                     rows={currentSection.rows}
                                   />
                                 );
-                                break;
                               case "carte-telechargement":
                                 return (
                                   <DownloadCard
@@ -357,7 +322,6 @@ export const PageBuilder = ({
                                     rows={currentSection.rows}
                                   />
                                 );
-                                break;
                             }
                           })}
                         </div>
