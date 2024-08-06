@@ -50,3 +50,41 @@ export type BlocFieldSimple = {
   texte_en_valeur: string;
   texte: string;
 };
+
+//Footer
+export type SocialLink = {
+  platform: string;
+  url?: string;
+  icon?: boolean;
+};
+
+export type FooterContent = {
+  afficher_section?: boolean;
+  titre_abonnement?: string;
+  lien_du_bouton_abonnement?: string;
+  texte_du_bouton_abonnement?: string;
+  titre?: string;
+  texte?: string;
+  lien_du_bouton?: string;
+  texte_du_bouton?: string;
+  lien_facebook?: string;
+  lien_twitter?: string;
+  lien_instagram?: string;
+  lien_linkedin?: string;
+  lien_youtube?: string;
+  lien_mastodon?: string;
+  logo?: {
+    data: {
+      attributes: {
+        url: string;
+      };
+    };
+  };
+  paragraphe_de_droite?: string;
+  liens_footer?: {
+    liens_footer: {
+      url: string;
+      titre_du_lien: string;
+    }[];
+  }[];
+};

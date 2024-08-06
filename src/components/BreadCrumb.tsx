@@ -1,17 +1,22 @@
 /* eslint-disable react/jsx-key */
 
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
-export const BreadCrumb = ({ hasBannerTitle }) => {
+type BreadCrumbProps = {
+  hasBannerTitle?: boolean;
+};
+
+export const BreadCrumb: React.FC<BreadCrumbProps> = ({ hasBannerTitle }) => {
   const location = useLocation();
-  const [pathname, setPathname] = useState(null);
+  const [pathname, setPathname] = useState<string[] | null>(null);
 
   useEffect(() => {
     setPathname(location.pathname.slice(1).split("/"));
   }, [location]);
 
-  const getFormatedText = (name) => {
+  const getFormatedText = (name: string): string => {
     switch (name) {
       case "Actualites":
         return "Actualités";
@@ -37,7 +42,7 @@ export const BreadCrumb = ({ hasBannerTitle }) => {
   const isBreves = pathname && pathname.length > 0 && pathname[0] === "breves";
   const isEtudes = pathname && pathname.length > 0 && pathname[0] === "etudes";
 
-  const getNestedPath = (pathname) => {
+  const getNestedPath = (pathname: string): string => {
     if (
       pathname.includes("axe") ||
       pathname.includes("engagement-transverse")
@@ -63,7 +68,7 @@ export const BreadCrumb = ({ hasBannerTitle }) => {
 
   return (
     <>
-      {pathname && pathname[0].length > 0 && pathname[0] != "accueil" && (
+      {pathname && pathname[0].length > 0 && pathname[0] !== "accueil" && (
         <nav
           role="navigation"
           className={`fr-breadcrumb ${hasBannerTitle ? "decal-breadcumb" : ""}`}
@@ -83,16 +88,13 @@ export const BreadCrumb = ({ hasBannerTitle }) => {
                   Accueil
                 </Link>
               </li>
-              {isEtudes ||
-                isReview ||
-                isMedia ||
-                (isRapportsStrategiques && (
-                  <li>
-                    <Link className="fr-breadcrumb__link" to="/nos-ressources">
-                      Nos Ressources
-                    </Link>
-                  </li>
-                ))}
+              {(isEtudes || isReview || isMedia || isRapportsStrategiques) && (
+                <li>
+                  <Link className="fr-breadcrumb__link" to="/nos-ressources">
+                    Nos Ressources
+                  </Link>
+                </li>
+              )}
               {isBreves && (
                 <li>
                   <Link className="fr-breadcrumb__link" to="/actualites">
@@ -104,26 +106,24 @@ export const BreadCrumb = ({ hasBannerTitle }) => {
                 const currName =
                   path[0].toUpperCase() + path.split("-").join(" ").slice(1);
                 return (
-                  <>
-                    {index < pathname.length - 1 && (
+                  <React.Fragment key={index}>
+                    {index < pathname.length - 1 ? (
                       <li>
                         <Link
-                          key={path.id}
                           className="fr-breadcrumb__link"
                           to={`/${getNestedPath(path)}${path}`}
                         >
                           {getFormatedText(currName)}
                         </Link>
                       </li>
-                    )}
-                    {index == pathname.length - 1 && (
+                    ) : (
                       <li>
                         <a className="fr-breadcrumb__link" aria-current="page">
                           {getFormatedText(currName)}
                         </a>
                       </li>
                     )}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </ol>
