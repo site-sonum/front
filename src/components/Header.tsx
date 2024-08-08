@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-key */
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import { HeaderLienNavbar } from "../types";
 // pictogrammes //
 import "remixicon/fonts/remixicon.css";
 
@@ -11,15 +12,20 @@ import "remixicon/fonts/remixicon.css";
 import { fetchData } from "../functions/fetcher.js";
 import { HOST_URL } from "../env.js";
 
-// eslint-disable-next-line react/prop-types
-export const Header = ({ liens_navbar, alerte }) => {
-  const [selectedLink, setSelectedLink] = useState(null);
-  const [selectedSubLink, setSelectedSubLink] = useState(null);
-  const [currentCollapse, setCurrentCollapse] = useState(null);
-  const [headerAlerte, setHeaderAlerte] = useState(null);
-  const [fixNav, setFixNav] = useState(false);
-  const [headerImage, setHeaderImage] = useState(null);
-  const [headerLinks, setHeaderLinks] = useState(null);
+type HeaderProps = {
+  liens_navbar: HeaderLienNavbar[] | null;
+  alerte: string | null;
+};
+export const Header: React.FC<HeaderProps> = ({ liens_navbar, alerte }) => {
+  const [selectedLink, setSelectedLink] = useState<HeaderLienNavbar | null>(
+    null,
+  );
+  const [selectedSubLink, setSelectedSubLink] = useState<any | null>(null);
+  const [currentCollapse, setCurrentCollapse] = useState<string | null>(null);
+  const [headerAlerte, setHeaderAlerte] = useState<string | null>(null);
+  const [fixNav, setFixNav] = useState<boolean>(false);
+  const [headerImage, setHeaderImage] = useState<string | null>(null);
+  const [headerLinks, setHeaderLinks] = useState<any[] | null>(null);
   const location = useLocation();
 
   const getNestedPath = (pathname) => {
@@ -34,13 +40,20 @@ export const Header = ({ liens_navbar, alerte }) => {
     }
   };
 
-  window.addEventListener("scroll", () => {
-    if (window.scrollY >= 145) {
-      setFixNav(true);
-    } else if (window.scrollY < 145) {
-      setFixNav(false);
-    }
-  });
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 145) {
+        setFixNav(true);
+      } else {
+        setFixNav(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (liens_navbar) {
@@ -80,37 +93,39 @@ export const Header = ({ liens_navbar, alerte }) => {
   }, [alerte]);
 
   useEffect(() => {
-    const currentPath = location.pathname;
-    liens_navbar.forEach((lien_navbar) => {
-      if (
-        lien_navbar.attributes.lien_navbar &&
-        lien_navbar.attributes.lien_navbar.length > 0 &&
-        currentPath.includes(
-          lien_navbar.attributes.lien_navbar[0].page_cible,
-        ) &&
-        lien_navbar.attributes.lien_navbar[0].page_cible !== "/"
-      ) {
-        setSelectedLink(lien_navbar);
-      }
-
-      if (
-        lien_navbar.attributes.lien_navbar &&
-        lien_navbar.attributes.lien_navbar.length > 0 &&
-        lien_navbar.attributes.lien_navbar[0].liens
-      ) {
-        const linkIndex = lien_navbar.attributes.lien_navbar[0].liens.findIndex(
-          (f) => currentPath.includes(f.page_cible),
-        );
-        if (linkIndex !== -1) {
+    if (liens_navbar) {
+      const currentPath = location.pathname;
+      liens_navbar.forEach((lien_navbar) => {
+        if (
+          lien_navbar.attributes.lien_navbar &&
+          lien_navbar.attributes.lien_navbar.length > 0 &&
+          currentPath.includes(
+            lien_navbar.attributes.lien_navbar[0].page_cible,
+          ) &&
+          lien_navbar.attributes.lien_navbar[0].page_cible !== "/"
+        ) {
           setSelectedLink(lien_navbar);
-          setCurrentCollapse(lien_navbar.id);
         }
-      }
-    });
+
+        if (
+          lien_navbar.attributes.lien_navbar &&
+          lien_navbar.attributes.lien_navbar.length > 0 &&
+          lien_navbar.attributes.lien_navbar[0].liens
+        ) {
+          const linkIndex =
+            lien_navbar.attributes.lien_navbar[0].liens.findIndex((f) =>
+              currentPath.includes(f.page_cible),
+            );
+          if (linkIndex !== -1) {
+            setSelectedLink(lien_navbar);
+            setCurrentCollapse(lien_navbar.id);
+          }
+        }
+      });
+    }
   }, [location.pathname, liens_navbar]);
 
   useEffect(() => {
-    ///LIENS DU HEADER///
     const loadHeaderLinks = async () => {
       try {
         const resp = await fetchData(HOST_URL + "/api/header");
@@ -123,7 +138,7 @@ export const Header = ({ liens_navbar, alerte }) => {
     loadHeaderLinks();
   }, []);
 
-  const giveMePath = (svg_coords) => {
+  const giveMePath = (svg_coords: string): string => {
     const start_path = svg_coords.indexOf('<path d="') + 9;
     const end_path = svg_coords.indexOf('"></path>');
     return svg_coords.slice(start_path, end_path);
@@ -145,7 +160,7 @@ export const Header = ({ liens_navbar, alerte }) => {
                       <img
                         src={HOST_URL + "/uploads/rp_6c5a005a88.svg"}
                         style={{ width: "4.9rem" }}
-                        alt=""
+                        alt="Logo ANCT"
                       />
                     </a>
                   </div>
@@ -191,7 +206,7 @@ export const Header = ({ liens_navbar, alerte }) => {
                               target={
                                 headerLink.page_cible?.includes("https")
                                   ? "_blank"
-                                  : null
+                                  : undefined
                               }
                             >
                               {headerLink.pictogramme_remixicon && (
@@ -218,11 +233,9 @@ export const Header = ({ liens_navbar, alerte }) => {
                                 </>
                               )}
                               {!headerLink.pictogramme_remixicon && (
-                                <>
-                                  <div style={{ marginTop: "4px" }}>
-                                    {headerLink.titre_du_lien}
-                                  </div>
-                                </>
+                                <div style={{ marginTop: "4px" }}>
+                                  {headerLink.titre_du_lien}
+                                </div>
                               )}
                             </Link>
                             {index < headerLinks.length - 1 && (
@@ -277,14 +290,14 @@ export const Header = ({ liens_navbar, alerte }) => {
                               "https://",
                             )
                               ? "_blank"
-                              : null
+                              : undefined
                           }
                           aria-current={
-                            selectedLink === lien_navbar ? "true" : null
+                            selectedLink === lien_navbar ? "true" : undefined
                           }
                           onClick={() => {
-                            setSelectedLink(lien_navbar),
-                              setCurrentCollapse(null);
+                            setSelectedLink(lien_navbar);
+                            setCurrentCollapse(null);
                           }}
                         >
                           {lien_navbar.attributes.lien_navbar[0].titre_du_lien}
@@ -297,10 +310,12 @@ export const Header = ({ liens_navbar, alerte }) => {
                           aria-expanded="false"
                           aria-controls={lien_navbar.id}
                           aria-current={
-                            currentCollapse === lien_navbar.id ? "true" : null
+                            currentCollapse === lien_navbar.id
+                              ? "true"
+                              : undefined
                           }
                           onClick={(e) => {
-                            if (e.button == 0) setSelectedLink(null);
+                            if (e.button === 0) setSelectedLink(null);
                           }}
                         >
                           {lien_navbar.attributes.lien_navbar[0].titre_du_menu}
@@ -310,40 +325,40 @@ export const Header = ({ liens_navbar, alerte }) => {
                           id={lien_navbar.id}
                         >
                           <ul className="fr-menu__list">
-                            {lien_navbar.attributes.lien_navbar[0].liens.map(
-                              (data) => {
-                                return (
-                                  <li key={data.id}>
-                                    <Link
-                                      to={
-                                        getNestedPath(data.page_cible) +
-                                        data.page_cible
-                                      }
-                                      className="fr-nav__link"
-                                      aria-current={
-                                        selectedSubLink === data ? "true" : null
-                                      }
-                                      target={
-                                        data.page_cible &&
-                                        data.page_cible.includes("https://")
-                                          ? "_blank"
-                                          : null
-                                      }
-                                      onClick={(e) => {
-                                        if (e.button == 0)
-                                          setCurrentCollapse(lien_navbar.id);
-                                      }}
-                                      onFocus={() => {
-                                        setSelectedSubLink(data);
+                            {lien_navbar.attributes.lien_navbar[0].liens?.map(
+                              (data) => (
+                                <li key={data.id}>
+                                  <Link
+                                    to={
+                                      getNestedPath(data.page_cible) +
+                                      data.page_cible
+                                    }
+                                    className="fr-nav__link"
+                                    aria-current={
+                                      selectedSubLink === data
+                                        ? "true"
+                                        : undefined
+                                    }
+                                    target={
+                                      data.page_cible &&
+                                      data.page_cible.includes("https://")
+                                        ? "_blank"
+                                        : undefined
+                                    }
+                                    onClick={(e) => {
+                                      if (e.button === 0)
                                         setCurrentCollapse(lien_navbar.id);
-                                      }}
-                                      onBlur={() => setSelectedSubLink(null)}
-                                    >
-                                      {data.titre_du_lien}
-                                    </Link>
-                                  </li>
-                                );
-                              },
+                                    }}
+                                    onFocus={() => {
+                                      setSelectedSubLink(data);
+                                      setCurrentCollapse(lien_navbar.id);
+                                    }}
+                                    onBlur={() => setSelectedSubLink(null)}
+                                  >
+                                    {data.titre_du_lien}
+                                  </Link>
+                                </li>
+                              ),
                             )}
                           </ul>
                         </div>

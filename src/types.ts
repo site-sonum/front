@@ -51,6 +51,35 @@ export type BlocFieldSimple = {
   texte: string;
 };
 
+export type DownloadCardLocalData = {
+  id: string;
+  image_de_la_carte: {
+    data: {
+      attributes: {
+        url: string;
+      };
+    };
+  };
+  type_de_carte: "Tuile" | "Classique";
+  taille: "Petit" | "Grand";
+  media_a_telecharger: {
+    data: {
+      attributes: {
+        url: string;
+      };
+    };
+  };
+  titre_de_la_carte: string;
+  description_de_la_carte: string;
+  label?: {
+    couleur_du_label: string;
+    titre_du_label: string;
+  };
+  espacement_bas: string;
+  position: "Centre" | "Gauche" | "Droite";
+  telechargement_externe?: string;
+};
+
 //Footer
 export type SocialLink = {
   platform: string;
@@ -87,4 +116,24 @@ export type FooterContent = {
       titre_du_lien: string;
     }[];
   }[];
+};
+
+//Header
+export type HeaderLienNavbar = {
+  id: string;
+  attributes: {
+    titre: string;
+    lien_navbar: Array<{
+      __component: string;
+      page_cible: string;
+      titre_du_lien: string;
+      titre_du_menu?: string;
+      pictogramme_remixicon?: string;
+      liens?: Array<{
+        id: string;
+        page_cible: string;
+        titre_du_lien: string;
+      }>;
+    }>;
+  };
 };

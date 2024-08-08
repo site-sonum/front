@@ -1,48 +1,81 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { HOST_URL } from "../env";
+import { labelColors, marginsBottom } from "../structs";
 import axios from "axios";
-import { marginsBottom } from "../structs";
+import { DownloadCardLocalData } from "../types";
 
-type DownloadLinkProps = {
-  data: {
-    id: string;
-    position: "Centre" | "Gauche" | "Droite";
-    espacement_bas: string;
-    titre_de_la_liste?: string;
-    Lien_telechargement: Array<{
-      actif: "Oui" | "Non";
-      texte_du_lien: string;
-      media_a_telecharger: {
-        data: { attributes: { url: string; name: string } } | null;
-      };
-    }>;
-  };
+type DownloadCardProps = {
+  data: DownloadCardLocalData;
   rows: number;
 };
 
-export const DownloadLink: React.FC<DownloadLinkProps> = ({ data, rows }) => {
-  const [localData, setLocalData] = useState<DownloadLinkProps["data"] | null>(
+export const DownloadCard: React.FC<DownloadCardProps> = ({ data, rows }) => {
+  const [localData, setLocalData] = useState<DownloadCardLocalData | null>(
     null,
   );
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [size, setSize] = useState<string | null>(null);
+  const [filename, setFilename] = useState<string>("");
 
   useEffect(() => {
     setLocalData(data);
   }, [data]);
 
-  const onDownload = async (url: string) => {
-    const fname = url.split("/").pop() || "download";
+  useEffect(() => {
+    if (localData) {
+      if (localData.image_de_la_carte.data != null) {
+        setImageUrl(HOST_URL + localData.image_de_la_carte.data.attributes.url);
+      }
+      if (localData.type_de_carte === "Tuile") {
+        if (rows === 1) {
+          switch (localData.taille) {
+            case "Petit":
+              setSize("fr-col-sm-3");
+              break;
+            case "Grand":
+              setSize("fr-col-md-4");
+              break;
+          }
+        } else if (rows === 2 || rows === 3) {
+          setSize("mh250 mw400");
+        }
+      }
+      if (localData.type_de_carte === "Classique") {
+        if (rows === 1) {
+          switch (localData.taille) {
+            case "Petit":
+              setSize("fr-col-sm-5");
+              break;
+            case "Grand":
+              setSize("fr-col-lg-6");
+              break;
+          }
+        } else if (rows === 2 || rows === 3) {
+          setSize("mh300 mw400");
+        }
+      }
+
+      if (localData.media_a_telecharger.data != null) {
+        const fname =
+          localData.media_a_telecharger.data.attributes.url.split("/");
+        setFilename(fname[2]);
+      }
+    }
+  }, [localData, rows]);
+
+  const onDownload = async (url: string, fileName: string) => {
     try {
       const remoteFile = await axios({
         method: "get",
-        url: HOST_URL + url,
+        url: url,
         responseType: "arraybuffer",
         headers: {
           Authorization: "",
         },
       });
       if (remoteFile) {
-        forceFileDownload(remoteFile, fname);
+        forceFileDownload(remoteFile, fileName);
       }
     } catch (error) {
       console.error("Download failed", error);
@@ -56,83 +89,184 @@ export const DownloadLink: React.FC<DownloadLinkProps> = ({ data, rows }) => {
     link.setAttribute("download", fileName);
     document.body.appendChild(link);
     link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url); // Révocation de l'URL pour libérer la mémoire
   };
-
-  const renderDownloadLinks = (
-    links: DownloadLinkProps["data"]["Lien_telechargement"],
-  ) =>
-    links.map((lien, index) => (
-      <li key={index}>
-        <a
-          href={
-            lien.media_a_telecharger?.data
-              ? HOST_URL + lien.media_a_telecharger.data.attributes.url
-              : undefined
-          }
-          className={`fr-link--download fr-link ${lien.actif === "Non" ? "disable-download-link" : ""}`}
-          data-fr-assess-file="arraybuffer"
-          hrefLang="fr"
-          download
-          target="_blank"
-          id={`link-${index}`}
-          onClick={async (e) => {
-            e.preventDefault();
-            if (lien.actif === "Oui" && lien.media_a_telecharger?.data) {
-              await onDownload(lien.media_a_telecharger.data.attributes.url);
-            }
-          }}
-        >
-          {lien.texte_du_lien}
-          <span className="fr-link__detail"> </span>
-        </a>
-      </li>
-    ));
 
   return (
     <>
       {localData && (
         <>
-          {rows === 1 && (
+          {localData.type_de_carte === "Tuile" && (
             <div
               key={localData.id}
-              style={{
-                display: "flex",
-                justifyContent:
-                  localData.position === "Centre"
-                    ? "center"
-                    : localData.position === "Gauche"
-                      ? "flex-start"
-                      : "flex-end",
-              }}
+              style={
+                rows === 1
+                  ? {
+                      display: "flex",
+                      justifyContent:
+                        localData.position === "Centre"
+                          ? "center"
+                          : localData.position === "Gauche"
+                            ? "flex-start"
+                            : "flex-end",
+                    }
+                  : {}
+              }
             >
-              {localData.Lien_telechargement.length > 0 && (
-                <div
-                  className="download-container"
-                  style={{
-                    marginBottom: marginsBottom[localData.espacement_bas],
-                  }}
-                >
-                  {localData.titre_de_la_liste && (
-                    <h4>{localData.titre_de_la_liste}</h4>
-                  )}
-                  <ul>{renderDownloadLinks(localData.Lien_telechargement)}</ul>
+              <div
+                className={`fr-tile fr-tile--download ${size} fr-enlarge-link mb2`}
+                id="tile-6735"
+                style={{ marginBottom: marginsBottom[data.espacement_bas] }}
+              >
+                <div className="fr-tile__body">
+                  <div className="fr-tile__content">
+                    <h3 className="fr-tile__title">
+                      <a
+                        href={
+                          localData.media_a_telecharger.data !== null
+                            ? HOST_URL +
+                              localData.media_a_telecharger.data.attributes.url
+                            : localData.telechargement_externe
+                        }
+                        download
+                        target="_blank"
+                        data-fr-assess-file="arraybuffer"
+                        hrefLang="fr"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onDownload(
+                            HOST_URL +
+                              localData.media_a_telecharger.data.attributes.url,
+                            filename,
+                          );
+                        }}
+                      >
+                        {localData.titre_de_la_carte}
+                      </a>
+                    </h3>
+                    <p className="fr-card__desc">
+                      {localData.label && (
+                        <span
+                          className={`card-label ${labelColors[localData.label.couleur_du_label]}`}
+                          style={{
+                            fontSize: "14px",
+                            display: "block",
+                            marginTop: "0px",
+                            marginBottom: "16px",
+                          }}
+                        >
+                          {localData.label.titre_du_label}
+                        </span>
+                      )}
+                      {localData.description_de_la_carte}
+                    </p>
+                    <p className="fr-tile__detail">Détail (optionnel)</p>
+                  </div>
                 </div>
-              )}
+                {imageUrl && (
+                  <div className="fr-tile__header">
+                    <div className="fr-tile__pictogram">
+                      <img src={imageUrl} alt="" />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
-
-          {rows > 1 && (
-            <div key={localData.id}>
-              {localData.Lien_telechargement.length > 0 && (
-                <div className="download-container">
-                  {localData.titre_de_la_liste && (
-                    <h4>{localData.titre_de_la_liste}</h4>
-                  )}
-                  <ul>{renderDownloadLinks(localData.Lien_telechargement)}</ul>
+          {localData.type_de_carte === "Classique" && (
+            <div
+              key={localData.id}
+              style={
+                rows === 1
+                  ? {
+                      display: "flex",
+                      justifyContent:
+                        localData.position === "Centre"
+                          ? "center"
+                          : localData.position === "Gauche"
+                            ? "flex-start"
+                            : "flex-end",
+                    }
+                  : {}
+              }
+            >
+              <div
+                className={`fr-card fr-enlarge-link fr-card--horizontal fr-card--horizontal-half ${size} mb2`}
+                style={{ marginBottom: marginsBottom[data.espacement_bas] }}
+              >
+                <div className="fr-card__body">
+                  <div className="fr-card__content">
+                    <h3 className="fr-card__title blue-text">
+                      {localData.titre_de_la_carte}
+                    </h3>
+                    <a
+                      href={
+                        localData.media_a_telecharger.data !== null
+                          ? HOST_URL +
+                            localData.media_a_telecharger.data.attributes.url
+                          : localData.telechargement_externe
+                      }
+                      download
+                      target="_blank"
+                      data-fr-assess-file="bytes"
+                      hrefLang="fr"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onDownload(
+                          HOST_URL +
+                            localData.media_a_telecharger.data.attributes.url,
+                          filename,
+                        );
+                      }}
+                    ></a>
+                    <p className="fr-card__desc">
+                      {localData.description_de_la_carte}
+                    </p>
+                    <div className="fr-card__start">
+                      {localData.label && (
+                        <span
+                          className={`card-label ${labelColors[localData.label.couleur_du_label]}`}
+                          style={{
+                            fontSize: "14px",
+                            display: "block",
+                            marginTop: "0px",
+                            marginBottom: "16px",
+                          }}
+                        >
+                          {localData.label.titre_du_label}
+                        </span>
+                      )}
+                    </div>
+                    <div className="fr-card__end">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{
+                          width: "25px",
+                          position: "absolute",
+                          right: "24px",
+                          bottom: "24px",
+                        }}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M3 19H21V21H3V19ZM13 13.1716L19.0711 7.1005L20.4853 8.51472L12 17L3.51472 8.51472L4.92893 7.1005L11 13.1716V2H13V13.1716Z"
+                          fill="#000091"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-              )}
+                {imageUrl && (
+                  <div className="fr-card__header fr-col-md-4">
+                    <div className="fr-card__img">
+                      <img
+                        className="fr-responsive-img"
+                        src={imageUrl}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </>

@@ -1,9 +1,20 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import { position } from "../structs.js";
 import { marginsBottom } from "../structs";
 
-export const Title = ({ data }) => {
+type TitleProps = {
+  data: {
+    titre: string;
+    taille: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    espacement_bas: keyof typeof marginsBottom;
+    position: "Gauche" | string;
+    page_cible: string;
+    titre_du_lien: string;
+  };
+};
+export const Title: React.FC<TitleProps> = ({ data }) => {
   return (
     <>
       <div

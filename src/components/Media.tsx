@@ -1,9 +1,32 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HOST_URL } from "../env";
 import { marginsBottom } from "../structs";
 
-export const Media = ({ data }) => {
+type MediaProps = {
+  data: {
+    id: string;
+    image: {
+      data: {
+        attributes: {
+          url: string;
+        } | null;
+      } | null;
+    };
+    lien_video: string;
+    description: string;
+    lien_du_label: string;
+    titre_du_label: string;
+    afficher_transcription: string;
+    taille: "Petit" | "Moyen" | "Grand";
+    espacement_bas: keyof typeof marginsBottom;
+    transcription_ouverte: boolean;
+    position: "Centre" | string;
+    transcription: string;
+  };
+};
+export const Media: React.FC<MediaProps> = ({ data }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [width, setWidth] = useState(null);
@@ -11,10 +34,10 @@ export const Media = ({ data }) => {
   useEffect(() => {
     if (data.image.data == null && data.lien_video == null) {
       setImageUrl(HOST_URL + "/uploads/placeholder_16x9_e6d60ccc52.png");
-    } else if (data.image != null && data.image.data != null) {
+    } else if (data.image.data !== null) {
       setImageUrl(HOST_URL + data.image.data.attributes.url);
     }
-    if (data.lien_video != null) {
+    if (data.lien_video !== null) {
       setVideoUrl(data.lien_video.replace("watch?v=", "embed/"));
     }
     switch (data.taille) {
@@ -50,7 +73,7 @@ export const Media = ({ data }) => {
               className="fr-responsive-vid fr-ratio-4x3"
               src={videoUrl}
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           )}
           {!videoUrl && imageUrl && (

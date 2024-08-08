@@ -1,15 +1,29 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { position } from "../structs.js";
 import { marginsBottom } from "../structs";
 // utilisation des configuration dsfr à revoir
-export const NavLink = ({ data, rows }) => {
+
+type NavLinkProps = {
+  data: {
+    id: string;
+    texte: string;
+    page_cible: string;
+    position: keyof typeof position;
+    taille: "Petit" | "Moyen" | "Grand";
+    espacement_bas: keyof typeof marginsBottom;
+  };
+  rows: number;
+};
+export const NavLink: React.FC<NavLinkProps> = ({ data, rows }) => {
   const [linkData, setLinkData] = useState([]);
-  const [size, setSize] = useState([]);
-  const [icon, setIcon] = useState([]);
+  const [size, setSize] = useState("");
+  const [icon, setIcon] = useState("");
 
   useEffect(() => {
     setLinkData(data);
+
     switch (data.taille) {
       case "Petit":
         setSize("ma classe fr-link fr-link--sm");
@@ -85,7 +99,7 @@ export const NavLink = ({ data, rows }) => {
             target={
               linkData.page_cible && linkData.page_cible.includes("https://")
                 ? "_blank"
-                : null
+                : undefined
             }
           >
             {linkData.texte}
