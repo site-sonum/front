@@ -1,14 +1,25 @@
-import { backgroundColors } from "../structs";
+import * as React from "react";
+//import { backgroundColors } from "../structs";
 import { Link } from "react-router-dom";
 import { marginsBottom } from "../structs";
 
-export const MiseEnAvant = ({ data }) => {
-  const giveMePath = (svg_coords) => {
+type MiseEnAvantProps = {
+  data: {
+    pictogramme_remixicon: string;
+    afficher_pictogramme: string;
+    espacement_bas: keyof typeof marginsBottom;
+    titre_du_bouton: string;
+    texte: string;
+    titre: string;
+    lien_du_bouton: string;
+  };
+};
+export const MiseEnAvant: React.FC<MiseEnAvantProps> = ({ data }) => {
+  const giveMePath = (svg_coords: string) => {
     const start_path = svg_coords.indexOf('<path d="') + 9;
     const end_path = svg_coords.indexOf('"></path>');
     return svg_coords.slice(start_path, end_path);
   };
-
   return (
     <div
       className={`fr-callout`}

@@ -1,15 +1,22 @@
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { HOST_URL } from "../env";
-import { labelColors } from "../structs";
-import { marginsBottom } from "../structs";
-
+import { labelColors, marginsBottom } from "../structs";
 import axios from "axios";
+import { DownloadCardLocalData } from "../types";
 
-export const DownloadCard = ({ data, rows }) => {
-  const [localData, setLocalData] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [size, setSize] = useState(null);
-  const [filename, setFilename] = useState("");
+type DownloadCardProps = {
+  data: DownloadCardLocalData;
+  rows: number;
+};
+
+export const DownloadCard: React.FC<DownloadCardProps> = ({ data, rows }) => {
+  const [localData, setLocalData] = useState<DownloadCardLocalData | null>(
+    null,
+  );
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [size, setSize] = useState<string | null>(null);
+  const [filename, setFilename] = useState<string>("");
 
   useEffect(() => {
     setLocalData(data);
@@ -20,8 +27,8 @@ export const DownloadCard = ({ data, rows }) => {
       if (localData.image_de_la_carte.data != null) {
         setImageUrl(HOST_URL + localData.image_de_la_carte.data.attributes.url);
       }
-      if (localData.type_de_carte == "Tuile") {
-        if (rows == 1) {
+      if (localData.type_de_carte === "Tuile") {
+        if (rows === 1) {
           switch (localData.taille) {
             case "Petit":
               setSize("fr-col-sm-3");
@@ -30,17 +37,12 @@ export const DownloadCard = ({ data, rows }) => {
               setSize("fr-col-md-4");
               break;
           }
-        } else {
-          if (rows == 2) {
-            setSize("mh250 mw400");
-          }
-          if (rows == 3) {
-            setSize("mh250 mw400");
-          }
+        } else if (rows === 2 || rows === 3) {
+          setSize("mh250 mw400");
         }
       }
-      if (localData.type_de_carte == "Classique") {
-        if (rows == 1) {
+      if (localData.type_de_carte === "Classique") {
+        if (rows === 1) {
           switch (localData.taille) {
             case "Petit":
               setSize("fr-col-sm-5");
@@ -49,13 +51,8 @@ export const DownloadCard = ({ data, rows }) => {
               setSize("fr-col-lg-6");
               break;
           }
-        } else {
-          if (rows == 2) {
-            setSize("mh300 mw400");
-          }
-          if (rows == 3) {
-            setSize("mh300 mw400");
-          }
+        } else if (rows === 2 || rows === 3) {
+          setSize("mh300 mw400");
         }
       }
 
@@ -65,23 +62,27 @@ export const DownloadCard = ({ data, rows }) => {
         setFilename(fname[2]);
       }
     }
-  }, [localData]);
+  }, [localData, rows]);
 
-  const onDownload = async (url, fileName) => {
-    const remoteFile = await axios({
-      method: "get",
-      url: url,
-      responseType: "arraybuffer",
-      headers: {
-        Authorization: "",
-      },
-    });
-    if (remoteFile) {
-      forceFileDownload(remoteFile, `${fileName}`);
+  const onDownload = async (url: string, fileName: string) => {
+    try {
+      const remoteFile = await axios({
+        method: "get",
+        url: url,
+        responseType: "arraybuffer",
+        headers: {
+          Authorization: "",
+        },
+      });
+      if (remoteFile) {
+        forceFileDownload(remoteFile, fileName);
+      }
+    } catch (error) {
+      console.error("Download failed", error);
     }
   };
 
-  const forceFileDownload = (response, fileName) => {
+  const forceFileDownload = (response: any, fileName: string) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
@@ -94,18 +95,18 @@ export const DownloadCard = ({ data, rows }) => {
     <>
       {localData && (
         <>
-          {localData.type_de_carte == "Tuile" && (
+          {localData.type_de_carte === "Tuile" && (
             <div
               key={localData.id}
               style={
-                rows == 1
+                rows === 1
                   ? {
                       display: "flex",
                       justifyContent:
                         localData.position === "Centre"
                           ? "center"
                           : localData.position === "Gauche"
-                            ? ""
+                            ? "flex-start"
                             : "flex-end",
                     }
                   : {}
@@ -158,31 +159,31 @@ export const DownloadCard = ({ data, rows }) => {
                       )}
                       {localData.description_de_la_carte}
                     </p>
-                    <p className="fr-tile__detail">Détail (optionel)</p>
+                    <p className="fr-tile__detail">Détail (optionnel)</p>
                   </div>
                 </div>
                 {imageUrl && (
                   <div className="fr-tile__header">
                     <div className="fr-tile__pictogram">
-                      <img src={imageUrl} />
+                      <img src={imageUrl} alt="" />
                     </div>
                   </div>
                 )}
               </div>
             </div>
           )}
-          {localData.type_de_carte == "Classique" && (
+          {localData.type_de_carte === "Classique" && (
             <div
               key={localData.id}
               style={
-                rows == 1
+                rows === 1
                   ? {
                       display: "flex",
                       justifyContent:
                         localData.position === "Centre"
                           ? "center"
                           : localData.position === "Gauche"
-                            ? ""
+                            ? "flex-start"
                             : "flex-end",
                     }
                   : {}
